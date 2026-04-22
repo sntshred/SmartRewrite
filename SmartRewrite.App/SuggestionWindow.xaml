@@ -1,0 +1,120 @@
+<Window x:Class="SmartRewrite.App.SuggestionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Width="440"
+        Height="540"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        AllowsTransparency="True"
+        ShowInTaskbar="False"
+        Topmost="True">
+    <Border CornerRadius="24"
+            Background="#FF10131A"
+            BorderBrush="#FF2A3442"
+            BorderThickness="1"
+            Padding="18">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel>
+                <TextBlock Text="SmartWrite"
+                           Foreground="#FFB8FFCF"
+                           FontSize="14"
+                           FontWeight="SemiBold" />
+                <TextBlock Text="Choose a professional version"
+                           Foreground="White"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Margin="0,6,0,0" />
+            </StackPanel>
+
+            <Border Grid.Row="1"
+                    Margin="0,18,0,16"
+                    Padding="14"
+                    CornerRadius="16"
+                    Background="#FF171C25"
+                    BorderBrush="#2230404F"
+                    BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="Selected text"
+                               Foreground="#FF8BA0B8"
+                               FontSize="12"
+                               Margin="0,0,0,6" />
+                    <TextBlock x:Name="OriginalTextBlock"
+                               TextWrapping="Wrap"
+                               Foreground="#FFF2F5F8"
+                               MaxHeight="84" />
+                </StackPanel>
+            </Border>
+
+            <StackPanel Grid.Row="2">
+                <RadioButton x:Name="OptionOneButton"
+                             Checked="OptionButton_Checked"
+                             Margin="0,0,0,10"
+                             Padding="16"
+                             Background="#FF1B2330"
+                             BorderBrush="#FF314155"
+                             BorderThickness="1"
+                             Foreground="White"
+                             GroupName="Suggestions" />
+                <RadioButton x:Name="OptionTwoButton"
+                             Checked="OptionButton_Checked"
+                             Margin="0,0,0,10"
+                             Padding="16"
+                             Background="#FF1B2330"
+                             BorderBrush="#FF314155"
+                             BorderThickness="1"
+                             Foreground="White"
+                             GroupName="Suggestions" />
+                <RadioButton x:Name="OptionThreeButton"
+                             Checked="OptionButton_Checked"
+                             Padding="16"
+                             Background="#FF1B2330"
+                             BorderBrush="#FF314155"
+                             BorderThickness="1"
+                             Foreground="White"
+                             GroupName="Suggestions" />
+            </StackPanel>
+
+            <Grid Grid.Row="3" Margin="0,18,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock x:Name="SelectionHintText"
+                           VerticalAlignment="Center"
+                           Foreground="#FF8BA0B8"
+                           Text="Select one variation, then confirm." />
+
+                <Button Grid.Column="1"
+                        Content="Close"
+                        Width="88"
+                        Margin="0,0,10,0"
+                        Padding="0,10"
+                        Background="#FF253244"
+                        BorderThickness="0"
+                        Foreground="White"
+                        Click="CloseButton_Click" />
+
+                <Button x:Name="ConfirmButton"
+                        Grid.Column="2"
+                        Content="Confirm"
+                        Width="100"
+                        Padding="0,10"
+                        Background="#FF36A268"
+                        BorderThickness="0"
+                        Foreground="White"
+                        IsEnabled="False"
+                        Click="ConfirmButton_Click" />
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

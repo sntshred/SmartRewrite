@@ -1,0 +1,28 @@
+# Build outputs
+bin/
+obj/
+out/
+output/
+
+# Local publish folders
+SmartRewrite.App/bin/Publish/
+SmartRewrite.App/bin/Publish-*/
+
+# Local tool state
+.dotnet/
+
+# User-specific files
+*.user
+*.suo
+*.userprefs
+*.rsuser
+
+# Logs
+*.log
+
+# OS/editor clutter
+.vs/
+.idea/
+.vscode/
+Thumbs.db
+Desktop.ini

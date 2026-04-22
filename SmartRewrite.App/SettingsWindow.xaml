@@ -1,0 +1,65 @@
+<Window x:Class="SmartRewrite.App.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SmartRewrite Settings"
+        Width="700"
+        Height="430"
+        WindowStartupLocation="CenterScreen"
+        Background="#FFF6F8FB">
+    <Grid Margin="28">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="SmartRewrite"
+                   FontSize="30"
+                   FontWeight="Bold"
+                   Foreground="#FF122033" />
+
+        <TextBlock Grid.Row="1"
+                   Margin="0,14,0,0"
+                   Text="This background assistant listens for selected text, asks OpenAI for 3 polished rewrites, then pastes the one you choose."
+                   TextWrapping="Wrap"
+                   FontSize="15"
+                   Foreground="#FF40546B" />
+
+        <Border Grid.Row="2"
+                Margin="0,22,0,0"
+                Padding="18"
+                Background="White"
+                BorderBrush="#FFD7E1EC"
+                BorderThickness="1"
+                CornerRadius="18">
+            <StackPanel>
+                <TextBlock Text="Setup"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           Foreground="#FF122033" />
+                <TextBlock Margin="0,10,0,0"
+                           Text="1. Set the Windows user environment variable OPENAI_API_KEY."
+                           Foreground="#FF40546B" />
+                <TextBlock Margin="0,6,0,0"
+                           Text="2. Edit appsettings.json in the install folder if you want a different model or custom prompt."
+                           TextWrapping="Wrap"
+                           Foreground="#FF40546B" />
+                <TextBlock Margin="0,6,0,0"
+                           Text="3. Leave the app running in the system tray. Select text in Word, Outlook, browsers, or editors to trigger suggestions."
+                           TextWrapping="Wrap"
+                           Foreground="#FF40546B" />
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="3"
+                Margin="0,18,0,0"
+                Padding="18"
+                Background="#FF122033"
+                CornerRadius="18">
+            <TextBlock Text="Important: this approach uses simulated Ctrl+C and Ctrl+V, so it works best in standard Windows text fields. Some protected apps, console windows, or remote desktop sessions may behave differently."
+                       Foreground="White"
+                       TextWrapping="Wrap" />
+        </Border>
+    </Grid>
+</Window>
