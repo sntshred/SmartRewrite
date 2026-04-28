@@ -17,6 +17,19 @@ public sealed class ClipboardSelectionService
         var originalClipboardText = TryGetClipboardText();
         var editableSelection = NativeMethods.TryCaptureEditableSelection();
 
+        if (!string.IsNullOrWhiteSpace(editableSelection.SelectedText))
+        {
+            return new SelectionCaptureResult
+            {
+                Text = editableSelection.SelectedText.Trim(),
+                TargetWindowHandle = targetWindowHandle,
+                FocusedControlHandle = editableSelection.ControlHandle,
+                SelectionStart = editableSelection.SelectionStart,
+                SelectionEnd = editableSelection.SelectionEnd,
+                UsedDirectSelection = true
+            };
+        }
+
         try
         {
             NativeMethods.SendCtrlPlusKey('C');
@@ -39,7 +52,8 @@ public sealed class ClipboardSelectionService
                 TargetWindowHandle = targetWindowHandle,
                 FocusedControlHandle = editableSelection.ControlHandle,
                 SelectionStart = editableSelection.SelectionStart,
-                SelectionEnd = editableSelection.SelectionEnd
+                SelectionEnd = editableSelection.SelectionEnd,
+                UsedDirectSelection = false
             };
         }
         finally

@@ -11,6 +11,8 @@ internal static class NativeMethods
     internal const int EM_GETSEL = 0x00B0;
     internal const int EM_SETSEL = 0x00B1;
     internal const int EM_REPLACESEL = 0x00C2;
+    internal const int WM_GETTEXT = 0x000D;
+    internal const int WM_GETTEXTLENGTH = 0x000E;
     internal const int VK_A = 0x41;
     internal const int VK_APPS = 0x5D;
     internal const int VK_CONTROL = 0x11;
@@ -69,6 +71,9 @@ internal static class NativeMethods
     private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, StringBuilder lParam);
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, string lParam);
 
     internal static IntPtr SetKeyboardHook(LowLevelKeyboardProc proc)
@@ -116,14 +121,15 @@ internal static class NativeMethods
         var handle = guiInfo.hwndFocus;
         if (!IsSupportedEditableControl(handle))
         {
-            return new EditableSelectionInfo(handle, null, null);
+            return new EditableSelectionInfo(handle, null, null, null);
         }
 
         var selection = SendMessage(handle, EM_GETSEL, IntPtr.Zero, IntPtr.Zero).ToInt32();
         var start = selection & 0xFFFF;
         var end = selection >> 16;
+        var selectedText = TryGetSelectedText(handle, start, end);
 
-        return new EditableSelectionInfo(handle, start, end);
+        return new EditableSelectionInfo(handle, start, end, selectedText);
     }
 
     internal static bool IsSupportedEditableControl(IntPtr hWnd)
@@ -148,6 +154,34 @@ internal static class NativeMethods
         SendMessage(hWnd, EM_SETSEL, (IntPtr)selectionStart, (IntPtr)selectionEnd);
         SendMessage(hWnd, EM_REPLACESEL, (IntPtr)1, text);
         return true;
+    }
+
+    private static string? TryGetSelectedText(IntPtr hWnd, int selectionStart, int selectionEnd)
+    {
+        if (selectionEnd <= selectionStart)
+        {
+            return null;
+        }
+
+        var textLength = SendMessage(hWnd, WM_GETTEXTLENGTH, IntPtr.Zero, IntPtr.Zero).ToInt32();
+        if (textLength <= 0)
+        {
+            return null;
+        }
+
+        var buffer = new StringBuilder(textLength + 1);
+        _ = SendMessage(hWnd, WM_GETTEXT, (IntPtr)buffer.Capacity, buffer);
+        var fullText = buffer.ToString();
+
+        if (string.IsNullOrEmpty(fullText) || selectionStart >= fullText.Length)
+        {
+            return null;
+        }
+
+        var safeEnd = Math.Min(selectionEnd, fullText.Length);
+        return safeEnd <= selectionStart
+            ? null
+            : fullText.Substring(selectionStart, safeEnd - selectionStart);
     }
 
     internal static void SendCtrlPlusKey(char key)
@@ -243,7 +277,11 @@ internal static class NativeMethods
     }
 }
 
-internal readonly record struct EditableSelectionInfo(IntPtr ControlHandle, int? SelectionStart, int? SelectionEnd)
+internal readonly record struct EditableSelectionInfo(
+    IntPtr ControlHandle,
+    int? SelectionStart,
+    int? SelectionEnd,
+    string? SelectedText)
 {
-    public static EditableSelectionInfo Empty { get; } = new(IntPtr.Zero, null, null);
+    public static EditableSelectionInfo Empty { get; } = new(IntPtr.Zero, null, null, null);
 }

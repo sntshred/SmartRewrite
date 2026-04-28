@@ -11,4 +11,6 @@ public sealed class SelectionCaptureResult
     public int? SelectionStart { get; init; }
 
     public int? SelectionEnd { get; init; }
+
+    public bool UsedDirectSelection { get; init; }
 }
